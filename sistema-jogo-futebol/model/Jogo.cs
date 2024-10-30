@@ -88,10 +88,33 @@ namespace sistema_jogo_futebol.model
             GerenciadorObservadores.Notificar($"O jogador {jogador.Nome} do {time.Nome} roubou a bola aos {MinutoAtual} minutos!");
         }
 
-
-        public void Substituir(Time time, Jogador jogadorSai, Jogador jogadorEntra)
+        public void Escanteio(Time time, Jogador jogador)
         {
-            GerenciadorObservadores.Notificar($"Substituição no {time.Nome}: {jogadorSai.Nome} saiu e {jogadorEntra.Nome} entrou aos {MinutoAtual} minutos!");
+            GerenciadorObservadores.Notificar($"O jogador {jogador.Nome} do {time.Nome} jogou a bola para escanteio aos {MinutoAtual} minutos!");
+        }
+
+        public void Falta(Time time, Jogador jogador)
+        {
+            GerenciadorObservadores.Notificar($"O jogador {jogador.Nome} do {time.Nome} fez a falta aos {MinutoAtual} minutos!");
+        }
+        public void Lateral(Time time, Jogador jogador)
+        {
+            GerenciadorObservadores.Notificar($"O jogador {jogador.Nome} do {time.Nome} cobrou o lateral aos {MinutoAtual} minutos!");
+        }
+
+        public void Chute(Time time, Jogador jogador)
+        {
+            GerenciadorObservadores.Notificar($"O jogador {jogador.Nome} do {time.Nome} chutou a bola aos {MinutoAtual} minutos!");
+        }
+
+        public void Defesa(Time time, Jogador jogador)
+        {
+            GerenciadorObservadores.Notificar($"O goleiro do {time.Nome} defende a bola aos {MinutoAtual} minutos!");
+        }
+
+        public void Substituir(Time time, Jogador jogadorSai, string jogadorEntra)
+        {
+            GerenciadorObservadores.Notificar($"Substituição no {time.Nome}: {jogadorSai.Nome} saiu e {jogadorEntra} entrou aos {MinutoAtual} minutos!");
         }
     }
 }
