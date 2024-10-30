@@ -1,0 +1,134 @@
+Documentação de Padrões de Projeto
+Introdução
+Padrões de design são soluções comprovadas para problemas comuns que surgem durante o desenvolvimento de software. Eles ajudam a criar sistemas mais flexíveis, reutilizáveis e de fácil manutenção. Neste projeto de jogo de futebol, foram implementados os seguintes padrões de projeto:
+
+Dois Criacionais: Singleton e Builder
+Um Estrutural: Composite
+Um Comportamental: Observer
+
+Padrões Criacionais
+1. Singleton
+Descrição
+O padrão Singleton garante que uma classe tenha apenas uma instância e fornece um ponto de acesso global a ela. Esse padrão é útil quando é necessário um controle centralizado sobre um recurso, como em jogos onde é importante manter um único estado de jogo.
+
+Implementação
+No nosso projeto, a classe Jogo é implementada como um Singleton, garantindo que apenas uma instância do jogo exista durante toda a execução do programa.
+
+public class Jogo
+{
+    private static Jogo _instanciaUnica;
+
+    public static Jogo Instancia => _instanciaUnica ??= new Jogo();
+
+    private Jogo() { /* Inicialização do jogo */ }
+}
+
+Justificativa
+O uso do padrão Singleton na classe Jogo evita a criação de múltiplas instâncias de jogo, o que poderia causar inconsistências no estado do jogo e dificultar a gestão do fluxo de eventos.
+
+2. Builder
+Descrição
+O padrão Builder facilita a criação de objetos complexos, permitindo a construção passo a passo de um objeto. Isso é especialmente útil quando um objeto precisa ser criado com muitas configurações ou propriedades.
+
+Implementação
+No nosso projeto, o padrão Builder é utilizado para construir a classe Time, permitindo que jogadores sejam adicionados de forma encadeada.
+
+public class TimeBuilder
+{
+    private Time _time;
+
+    public TimeBuilder(string nome)
+    {
+        _time = new Time(nome);
+    }
+
+    public TimeBuilder AdicionarJogador(string nome, int numero, string posicao)
+    {
+        _time.Adicionar(new Jogador(nome, numero, posicao));
+        return this;
+    }
+
+    public Time Build()
+    {
+        return _time;
+    }
+}
+
+Justificativa
+O padrão Builder foi escolhido para criar times de forma mais legível e organizada, facilitando a adição de jogadores e a configuração do time sem necessidade de um construtor complexo.
+
+Padrão Estrutural
+Composite
+Descrição
+O padrão Composite permite que objetos individuais e composições de objetos sejam tratados de forma uniforme. Isso é útil quando se tem uma estrutura hierárquica.
+
+Implementação
+No nosso projeto, a interface ITimeComponent é utilizada para representar tanto jogadores quanto times, permitindo que eles sejam tratados como componentes.
+
+public interface ITimeComponent
+{
+    void ExibirDetalhes();
+}
+
+public class Jogador : ITimeComponent
+{
+    public void ExibirDetalhes() { /* Implementação para exibir detalhes do jogador */ }
+}
+
+public class Time : ITimeComponent
+{
+    private List<ITimeComponent> componentes = new List<ITimeComponent>();
+
+    public void Adicionar(ITimeComponent componente) 
+    {
+        componentes.Add(componente);
+    }
+
+    public void ExibirDetalhes() 
+    {
+        foreach (var componente in componentes)
+        {
+            componente.ExibirDetalhes();
+        }
+    }
+}
+
+Justificativa
+O uso do padrão Composite permite tratar jogadores e times de maneira uniforme, facilitando a exibição e manipulação de ambos sem complicações adicionais no código.
+
+Padrão Comportamental
+Observer
+Descrição
+O padrão Observer define uma dependência um-para-muitos entre objetos, de modo que, quando um objeto muda de estado, todos os seus dependentes são notificados e atualizados automaticamente.
+
+Implementação
+No nosso projeto, o padrão Observer é utilizado para notificar os observadores sobre eventos que ocorrem no jogo, como gols, cartões e substituições.
+
+public interface IObservadorJogo
+{
+    void Atualizar(string mensagem);
+}
+
+public class GerenciadorObservadores
+{
+    private List<IObservadorJogo> _observadores = new List<IObservadorJogo>();
+
+    public void RegistrarObservador(IObservadorJogo observador)
+    {
+        _observadores.Add(observador);
+    }
+
+    public void Notificar(string mensagem)
+    {
+        foreach (var observador in _observadores)
+        {
+            observador.Atualizar(mensagem);
+        }
+    }
+}
+
+Justificativa
+O padrão Observer foi implementado para permitir que diferentes partes do sistema (como a interface do usuário) sejam atualizadas automaticamente em resposta a eventos no jogo, melhorando a separação de responsabilidades e facilitando a manutenção do código.
+
+Conclusão
+A implementação desses padrões de design não apenas organizou o código de forma eficiente, mas também trouxe benefícios significativos em termos de manutenção e escalabilidade. Cada padrão foi escolhido com base em suas características e aplicabilidade no contexto do projeto de jogo de futebol.
